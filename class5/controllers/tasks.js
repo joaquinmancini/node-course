@@ -28,7 +28,7 @@ module.exports = (mongoose) => {
         response200(res, {tasks}, `Found '${tasks.length}' tasks.`);
       })
       .catch((err) => {
-        response400(res, err, "Tasks couldn't be bound!");
+        response400(res, err, "Tasks couldn't be found!");
       });
   }
 
