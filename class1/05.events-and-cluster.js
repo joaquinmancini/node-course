@@ -51,16 +51,16 @@ if (cluster.isMaster) {
     cluster.fork();
   }
 
-  for (const id in cluster.workers) {
-    // Listen on "message" event for each worker but at main process side
-    cluster.workers[id].on("message", messageHandler);
-  }
+  // for (const id in cluster.workers) {
+  //   // Listen on "message" event for each worker but at main process side
+  //   cluster.workers[id].on("message", messageHandler);
+  // }
 
   // This is another (easiest) way to listen for workers messages
   cluster.on("message", (worker, message) => {
     console.log(`Worker #${worker.process.pid} sent a message to master!`);
     console.log("Message: ", message);
-    // messageHandler(message); We could call messageHandler() here too
+    messageHandler(message);
   });
 
   cluster.on("exit", (worker, code, signal) => {

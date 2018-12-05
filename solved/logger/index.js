@@ -6,8 +6,8 @@ function transformDataObjectToJson(data) {
   return `${JSON.stringify(data, null, 2)}\n`;
 }
 
-function logRequest(data) {
-  fs.appendFile(file, transformDataObjectToJson(data), (err) => {
+function logRequest(json) {
+  fs.appendFile(file, json, (err) => {
     if (err) {
       console.error(err);
     } else {
@@ -18,15 +18,16 @@ function logRequest(data) {
 
 http.createServer((req, res) => {
   const data = {
-    url: req.url,
-    headers: req.headers,
-    ip: req.connection.remoteAddress,
-    timestamp: new Date().toISOString()
-  };
+      url: req.url,
+      headers: req.headers,
+      ip: req.connection.remoteAddress,
+      timestamp: new Date().toISOString()
+    },
+    json = transformDataObjectToJson(data);
 
   console.log(`Request received for ${req.url}`);
-  logRequest(data);
+  logRequest(json);
   res.writeHead(200, {"Content-Type": "application/json"});
-  res.end(transformDataObjectToJson(data));
+  res.end(json);
   console.log("Response sent!");
 }).listen(8000);
