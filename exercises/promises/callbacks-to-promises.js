@@ -50,3 +50,13 @@ calculateConversion(1000, (err, data) => {
     console.log(`La cantidad de '${data.pesos}' pesos equivalen actualmente a '${data.conversion}' dolares!`);
   }
 });
+
+// Deberia quedar:
+// calculateConversion(1000)
+//   .then((data) => {
+//     console.log(`Cotización actual: $${data.dolar} =0`);
+//     console.log(`La cantidad de '${data.pesos}' pesos equivalen actualmente a '${data.conversion}' dolares!`);
+//   })
+//   .catch((err) => {
+//     console.error("Error!!!! :: ", err);
+//   });

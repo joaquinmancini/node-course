@@ -1,19 +1,32 @@
 const fs = require("fs");
+let jsonData = null;
 
-function loadCountriesAndFind(finderFunc, cb) {
+function loadCountries(cb) { // eslint-disable-line consistent-return
+  if (jsonData) {
+    return cb(null, jsonData);
+  }
+
   fs.readFile(`${__dirname}/countries.json`, "utf8", (err, data) => { // eslint-disable-line consistent-return
     if (err) {
       return cb(err, null);
     }
 
-    let result = null;
     try {
-      result = JSON.parse(data).find(finderFunc);
+      jsonData = JSON.parse(data);
+      loadCountries(cb);
     } catch (exc) {
       cb(exc, null);
     }
+  });
+}
 
-    cb(null, result);
+function findCountries(finderFunc, cb) {
+  loadCountries((err, countries) => {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, countries.find(finderFunc));
+    }
   });
 }
 
@@ -25,7 +38,7 @@ module.exports = {
       return c.code === code;
     };
 
-    loadCountriesAndFind(finderFunc, cb);
+    findCountries(finderFunc, cb);
   },
 
   getCountryInfoByName(name, cb) {
@@ -33,16 +46,15 @@ module.exports = {
       return c.name === name;
     }
 
-    loadCountriesAndFind(finderFunc, cb);
+    findCountries(finderFunc, cb);
   },
 
   getCountryInfoWithRequire(code) {
-    const countries = require("./countries.json"),
-      result = countries.find((c) => {
-        return c.code === code;
-      });
+    const countries = require("./countries.json");
     
-    return result;
+    return countries.find((c) => {
+      return c.code === code;
+    });
   }
   
 };
