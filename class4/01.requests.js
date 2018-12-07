@@ -23,7 +23,7 @@ function getNodeRepos() {
         }
       } else {
         console.error(response);
-        // Log the conflictive response but returns an error without any request data!
+        // Log the conflictive response but returns an error without any sensitive data!
         reject(new Error("Couldn't get node repos!"));
       }
     });
