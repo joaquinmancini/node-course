@@ -7,7 +7,6 @@ module.exports = (app, router) => {
     .get(taskControllers.list)
     .post(taskControllers.create);
 
-
   router.route("/tasks/:taskId")
     .get(taskControllers.read)
     .put(taskControllers.update)
