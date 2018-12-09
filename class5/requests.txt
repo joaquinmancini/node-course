@@ -1,0 +1,30 @@
+# Get all tasks list
+GET http://localhost:8000/api/tasks?status=completed HTTP/1.1
+
+
+# Create a task
+POST http://localhost:8000/api/tasks HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Tarea de prueba!",
+    "status": "completed"
+}
+
+
+# Get a task by ID
+GET http://localhost:8000/api/tasks/5ba415989bc20144d6fa7975 HTTP/1.1
+
+
+# Delete a task by ID
+DELETE http://localhost:8000/api/tasks/5ba467c39004033004faee79 HTTP/1.1
+
+
+# Update a task by ID
+PUT http://localhost:8000/api/tasks/5ba415989bc20144d6fa7975 HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Modificando una tarea!",
+    "status": "doing"
+}

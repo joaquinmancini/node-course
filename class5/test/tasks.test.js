@@ -3,7 +3,8 @@ const app = require("../app.js"),
   request = require("supertest"),
   mongoose = app.get("mongoose"),
   Task = mongoose.model("Task"),
-  taskId = new mongoose.Types.ObjectId();
+  taskId = new mongoose.Types.ObjectId(),
+  path = "/api/tasks";
 
 describe("Tasks controller tests", () => {
 
@@ -15,8 +16,8 @@ describe("Tasks controller tests", () => {
         console.log("Tasks collection cleaned!");
         return Promise.all([
           Task.create({name: "Task 1"}),
-          Task.create({name: "Task 2"}),
-          Task.create({name: "Task 3"})
+          Task.create({name: "Task 2", status: "doing"}),
+          Task.create({name: "Task 3", status: "completed"})
         ]);
       })
       .then(([createdTask1]) => {
@@ -28,12 +29,24 @@ describe("Tasks controller tests", () => {
 
     it("should get all tasks", () => {
       return request(app)
-        .get("/tasks")
+        .get(path)
         .expect(200)
         .then((res) => {
           expect(res.body.status).to.eql("success");
           expect(res.body.data.tasks).to.be.an("array");
           expect(res.body.data.tasks.length).to.eql(3);
+        });
+    });
+
+    it("should filter tasks by name", () => {
+      return request(app)
+        .get(`${path}?name=${task1.name}`)
+        .expect(200)
+        .then((res) => {
+          expect(res.body.status).to.eql("success");
+          expect(res.body.data.tasks).to.be.an("array");
+          expect(res.body.data.tasks.length).to.eql(1);
+          expect(res.body.data.tasks[0]._id.toString()).to.eql(task1._id.toString());
         });
     });
 
@@ -48,7 +61,7 @@ describe("Tasks controller tests", () => {
       };
       
       return request(app)
-        .post("/tasks")
+        .post(path)
         .send(body)
         .expect(200)
         .then((res) => {
@@ -60,9 +73,9 @@ describe("Tasks controller tests", () => {
 
     it("should fail because name wasn't given", () => {
       return request(app)
-        .post("/tasks")
+        .post(path)
         .send({})
-        .expect(400)
+        .expect(500)
         .then((res) => {
           expect(res.body.status).to.eql("error");
           expect(res.body.message).to.contain("Task name is mandatory");
@@ -71,9 +84,9 @@ describe("Tasks controller tests", () => {
 
     it("should fail because status isn't right", () => {
       return request(app)
-        .post("/tasks")
+        .post(path)
         .send({name: "Failed task", status: "whatever"})
-        .expect(400)
+        .expect(500)
         .then((res) => {
           expect(res.body.status).to.eql("error");
           expect(res.body.message).to.contains("is not a valid enum value");
@@ -86,17 +99,17 @@ describe("Tasks controller tests", () => {
 
     it("should get a task", () => {
       return request(app)
-        .get(`/tasks/${task1.id}`)
+        .get(`${path}/${task1.id}`)
         .expect(200)
         .then((res) => {
           expect(res.body.status).to.eql("success");
-          expect(res.body.data.task.name).to.eql(task1.name);
+          expect(res.body.data.task._id.toString()).to.eql(task1._id.toString());
         });
     });
 
     it("should fail because task wasn't found", () => {
       return request(app)
-        .get(`/tasks/${taskId}`)
+        .get(`${path}/${taskId}`)
         .expect(404)
         .then((res) => {
           expect(res.body.status).to.eql("error");
@@ -114,7 +127,7 @@ describe("Tasks controller tests", () => {
       };
 
       return request(app)
-        .put(`/tasks/${task1.id}`)
+        .put(`${path}/${task1.id}`)
         .send(body)
         .expect(200)
         .then((res) => {
@@ -125,11 +138,22 @@ describe("Tasks controller tests", () => {
 
     it("should fail because task wasn't found", () => {
       return request(app)
-        .put(`/tasks/${taskId}`)
+        .put(`${path}/${taskId}`)
         .expect(404)
         .then((res) => {
           expect(res.body.status).to.eql("error");
           expect(res.body.message).to.contain("Task not found!");
+        });
+    });
+
+    it("should fail because status isn't right", () => {
+      return request(app)
+        .put(`${path}/${task1.id}`)
+        .send({name: "Failed task", status: "whatever"})
+        .expect(500)
+        .then((res) => {
+          expect(res.body.status).to.eql("error");
+          expect(res.body.message).to.contains("is not a valid enum value");
         });
     });
 
@@ -139,7 +163,7 @@ describe("Tasks controller tests", () => {
 
     it("should delete a task", () => {
       return request(app)
-        .delete(`/tasks/${task1.id}`)
+        .delete(`${path}/${task1.id}`)
         .expect(200)
         .then((res) => {
           expect(res.body.status).to.eql("success");
@@ -149,7 +173,7 @@ describe("Tasks controller tests", () => {
 
     it("should fail because task wasn't found", () => {
       return request(app)
-        .delete(`/tasks/${taskId}`)
+        .delete(`${path}/${taskId}`)
         .expect(404)
         .then((res) => {
           expect(res.body.status).to.eql("error");

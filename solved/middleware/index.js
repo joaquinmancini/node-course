@@ -37,13 +37,9 @@ app.use((req, res, next) => {
   } else if (req.url === "/favicon.ico") {
     noFavicon(res);
   } else {
+    res.logData = logRequest(req);
     next();
   }
-});
-
-app.use((req, res, next) => {
-  res.logData = logRequest(req);
-  next();
 });
 
 app.get("*", (req, res) => {
