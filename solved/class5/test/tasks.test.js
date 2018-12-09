@@ -40,7 +40,7 @@ describe("Tasks controller tests", () => {
         });
     });
 
-    describe.skip("filter", () => {
+    describe("filter", () => {
 
       it("should filter tasks by name", () => {
         return request(app)
@@ -55,12 +55,20 @@ describe("Tasks controller tests", () => {
       });
   
       it("should filter tasks by status", () => {
-        // @TODO Complete me!
+        return request(app)
+          .get(`${path}?status=${task1.status}`)
+          .expect(200)
+          .then((res) => {
+            expect(res.body.status).to.eql("success");
+            expect(res.body.data.tasks).to.be.an("array");
+            expect(res.body.data.tasks.length).to.eql(1);
+            expect(res.body.data.tasks[0]._id.toString()).to.eql(task1._id.toString());
+          });
       });
 
     });
 
-    describe.skip("sort", () => {
+    describe("sort", () => {
 
       it("should sort tasks by name,desc", () => {
         return request(app)
@@ -77,7 +85,17 @@ describe("Tasks controller tests", () => {
       });
   
       it("should sort tasks by status,asc", () => {
-        // @TODO Complete me!
+        return request(app)
+          .get(`${path}?sort=status,asc`)
+          .expect(200)
+          .then((res) => {
+            expect(res.body.status).to.eql("success");
+            expect(res.body.data.tasks).to.be.an("array");
+            expect(res.body.data.tasks.length).to.eql(3);
+            expect(res.body.data.tasks[0]._id.toString()).to.eql(createdTasks[2]._id.toString());
+            expect(res.body.data.tasks[1]._id.toString()).to.eql(createdTasks[1]._id.toString());
+            expect(res.body.data.tasks[2]._id.toString()).to.eql(createdTasks[0]._id.toString());
+          });
       });
 
     });

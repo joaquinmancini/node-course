@@ -1,9 +1,29 @@
 module.exports = (mongoose) => {
 
-  const Task = mongoose.model("Task");
+  const Task = mongoose.model("Task"),
+    filterFields = ["name", "status"],
+    sortFields = ["name", "status"];
+
+  function buildFilterQuery(params) {
+    return filterFields.reduce((query, prop) => {
+      if (params[prop]) {
+        query[prop] = params[prop];
+      }
+      return query;
+    }, {});
+  }
+
+  function buildSortQuery(sortBy = "") {
+    const [sortField, sortDir] = sortBy.split(",");
+
+    if (sortFields.indexOf(sortField) > -1) {
+      return {[sortField]: sortDir.toLowerCase() === "desc" ? -1 : 1};
+    }
+    return {};
+  }
 
   function list(req, res) {
-    Task.find({})
+    Task.find(buildFilterQuery(req.query)).sort(buildSortQuery(req.query.sort))
       .then((tasks) => {
         res.response200({tasks}, `Found '${tasks.length}' tasks.`);
       })
