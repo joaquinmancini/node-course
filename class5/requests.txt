@@ -1,9 +1,20 @@
+# Generate a token
+GET http://localhost:8000/api/token HTTP/1.1
+
+
+# Get token expiration
+POST http://localhost:8000/api/token HTTP/1.1
+token: 43f91eff264cc19388978b4138a71a6d9d1cf26d5380a1526d3dddfc6db2
+
+
 # Get all tasks list
 GET http://localhost:8000/api/tasks?status=completed HTTP/1.1
+token: 43f91eff264cc19388978b4138a71a6d9d1cf26d5380a1526d3dddfc6db2
 
 
 # Create a task
 POST http://localhost:8000/api/tasks HTTP/1.1
+token: 43f91eff264cc19388978b4138a71a6d9d1cf26d5380a1526d3dddfc6db2
 content-type: application/json
 
 {
@@ -14,14 +25,17 @@ content-type: application/json
 
 # Get a task by ID
 GET http://localhost:8000/api/tasks/5ba415989bc20144d6fa7975 HTTP/1.1
+token: 43f91eff264cc19388978b4138a71a6d9d1cf26d5380a1526d3dddfc6db2
 
 
 # Delete a task by ID
 DELETE http://localhost:8000/api/tasks/5ba467c39004033004faee79 HTTP/1.1
+token: 43f91eff264cc19388978b4138a71a6d9d1cf26d5380a1526d3dddfc6db2
 
 
 # Update a task by ID
 PUT http://localhost:8000/api/tasks/5ba415989bc20144d6fa7975 HTTP/1.1
+token: 43f91eff264cc19388978b4138a71a6d9d1cf26d5380a1526d3dddfc6db2
 content-type: application/json
 
 {

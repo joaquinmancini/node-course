@@ -4,7 +4,8 @@ const app = require("../app.js"),
   mongoose = app.get("mongoose"),
   Task = mongoose.model("Task"),
   taskId = new mongoose.Types.ObjectId(),
-  path = "/api/tasks";
+  path = "/api/tasks",
+  testToken = "test-token";
 
 describe("Tasks controller tests", () => {
 
@@ -32,6 +33,7 @@ describe("Tasks controller tests", () => {
     it("should get all tasks", () => {
       return request(app)
         .get(path)
+        .set("token", testToken)
         .expect(200)
         .then((res) => {
           expect(res.body.status).to.eql("success");
@@ -45,6 +47,7 @@ describe("Tasks controller tests", () => {
       it("should filter tasks by name", () => {
         return request(app)
           .get(`${path}?name=${task1.name}`)
+          .set("token", testToken)
           .expect(200)
           .then((res) => {
             expect(res.body.status).to.eql("success");
@@ -65,6 +68,7 @@ describe("Tasks controller tests", () => {
       it("should sort tasks by name,desc", () => {
         return request(app)
           .get(`${path}?sort=name,desc`)
+          .set("token", testToken)
           .expect(200)
           .then((res) => {
             expect(res.body.status).to.eql("success");
@@ -94,6 +98,7 @@ describe("Tasks controller tests", () => {
       
       return request(app)
         .post(path)
+        .set("token", testToken)
         .send(body)
         .expect(200)
         .then((res) => {
@@ -106,6 +111,7 @@ describe("Tasks controller tests", () => {
     it("should fail because name wasn't given", () => {
       return request(app)
         .post(path)
+        .set("token", testToken)
         .send({})
         .expect(500)
         .then((res) => {
@@ -117,6 +123,7 @@ describe("Tasks controller tests", () => {
     it("should fail because status isn't right", () => {
       return request(app)
         .post(path)
+        .set("token", testToken)
         .send({name: "Failed task", status: "whatever"})
         .expect(500)
         .then((res) => {
@@ -132,6 +139,7 @@ describe("Tasks controller tests", () => {
     it("should get a task", () => {
       return request(app)
         .get(`${path}/${task1.id}`)
+        .set("token", testToken)
         .expect(200)
         .then((res) => {
           expect(res.body.status).to.eql("success");
@@ -142,6 +150,7 @@ describe("Tasks controller tests", () => {
     it("should fail because task wasn't found", () => {
       return request(app)
         .get(`${path}/${taskId}`)
+        .set("token", testToken)
         .expect(404)
         .then((res) => {
           expect(res.body.status).to.eql("error");
@@ -160,6 +169,7 @@ describe("Tasks controller tests", () => {
 
       return request(app)
         .put(`${path}/${task1.id}`)
+        .set("token", testToken)
         .send(body)
         .expect(200)
         .then((res) => {
@@ -171,6 +181,7 @@ describe("Tasks controller tests", () => {
     it("should fail because task wasn't found", () => {
       return request(app)
         .put(`${path}/${taskId}`)
+        .set("token", testToken)
         .expect(404)
         .then((res) => {
           expect(res.body.status).to.eql("error");
@@ -181,6 +192,7 @@ describe("Tasks controller tests", () => {
     it("should fail because status isn't right", () => {
       return request(app)
         .put(`${path}/${task1.id}`)
+        .set("token", testToken)
         .send({name: "Failed task", status: "whatever"})
         .expect(500)
         .then((res) => {
@@ -196,6 +208,7 @@ describe("Tasks controller tests", () => {
     it("should delete a task", () => {
       return request(app)
         .delete(`${path}/${task1.id}`)
+        .set("token", testToken)
         .expect(200)
         .then((res) => {
           expect(res.body.status).to.eql("success");
@@ -206,6 +219,7 @@ describe("Tasks controller tests", () => {
     it("should fail because task wasn't found", () => {
       return request(app)
         .delete(`${path}/${taskId}`)
+        .set("token", testToken)
         .expect(404)
         .then((res) => {
           expect(res.body.status).to.eql("error");

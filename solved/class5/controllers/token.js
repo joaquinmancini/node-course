@@ -2,10 +2,6 @@ module.exports = (mongoose, config) => {
 
   const Token = mongoose.model("Token"),
     crypto = require("crypto");
-  
-  function isExpired(token) {
-    return new Date() > new Date(token.expireDate);
-  }
 
   function generate(req, res) {
     const data = {
@@ -23,9 +19,9 @@ module.exports = (mongoose, config) => {
   }
 
   function read(req, res) {
-    Token.findOne({token: req.headers.token})
+    Token.findByValidToken(req.headers.token)
       .then((token) => {
-        if (token && !isExpired(token)) {
+        if (token) {
           res.response200(token.expireDate, "Token found.");
         } else {
           res.response200(null, "Token expired or not found!");

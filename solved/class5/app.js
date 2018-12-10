@@ -24,6 +24,9 @@ mongoose.Promise = global.Promise;
 mongoose.connect(config.db, {useNewUrlParser: true});
 require("./models")(mongoose);
 
+// Add authentication middleware
+app.use(require("./lib/auth")(mongoose));
+
 // Register the routes and mount them all at /api
 app.use("/api", require("./routes")(app, express.Router()));
 
