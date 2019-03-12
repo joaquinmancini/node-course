@@ -176,20 +176,24 @@ function shuffle(a) {
   return a;
 }
 
+function filterTeams(prop, val) {
+  return teams.filter(t => t[prop] === val);
+}
+
 function getTeamsForBox(box) {
-  return teams.filter(t => t.box === box);
+  return filterTeams("box", box);
 }
 
 function getTeamsForGroup(group) {
-  return teams.filter(t => t.group === group);
+  return filterTeams("group", group);
 }
 
 
 /** 
  * Rusia entra directo como cabeza de serie al grupo A (país organizador)
  * del box 1 sale cada cabeza de serie (para el grupo B al H)
- * del box 2 salen los 3ros de cada grupo
- * del box 3 uno a cada grupo y lo mismo del 4
+ * del box 2 salen los 2dos de cada grupo
+ * del box 3 los 3ros y lo mismo para el 4
  */
 function simulate() {
   const groups = ["A", "B", "C", "D", "E", "F", "G", "H"];
