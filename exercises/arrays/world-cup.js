@@ -201,7 +201,7 @@ function simulate() {
   console.log("Resultados del sorteo:");
   groups.forEach((g) => {
     console.log(`Grupo ${g}:`);
-    const teamNames = getTeamsForGroup(g).map(t => t.name);
+    const teamNames = getTeamsForGroup(g).map(t => `${t.name} (${t.box})`);
     console.log(teamNames.join(", "));
   });
 }
