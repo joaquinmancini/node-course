@@ -11,8 +11,22 @@ const sinon = require("sinon"),
 
 describe("Sinon tests", () => {
 
+  before(() => {
+    // Code to be executed before ALL tests (just once)
+    // Used to set tests initial values and/or modules instantiation
+  });
   after(() => {
+    // Code to be executed after ALL tests (just once)
+    // Used to clean up all tests results (possible leftovers or garbage)
     sinon.restore();
+  });
+  beforeEach(() => {
+    // Code to be executed before EACH tests (once per test)
+    // Same as before() but for each runned test
+  });
+  afterEach(() => {
+    // Code to be executed after EACH test (once per test)
+    // Same as after() but for each runned test
   });
 
   describe("sinon.spy()", () => {

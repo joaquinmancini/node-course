@@ -42,5 +42,13 @@ describe("tests for goals", () => {
         expect(result).to.be.eql(goalsModule.goals);
       });
     });
+
+    it("should return a rejected Promise with an error", () => {
+      return goalsModule.asyncPromiseReject()
+        .then(() => Promise.reject("Should fail!"))
+        .catch((err) => {
+          expect("This is an error!").to.be.eql(err);
+        });
+    });
   });
 });

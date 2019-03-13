@@ -49,9 +49,14 @@ function asyncPromiseAndGetGoals() {
   return Promise.resolve(goals);
 }
 
+function asyncPromiseReject() {
+  return Promise.reject("This is an error!");
+}
+
 module.exports = {
   goals,
   getGoalsFrom,
   asyncTaskAndGetGoals,
-  asyncPromiseAndGetGoals
+  asyncPromiseAndGetGoals,
+  asyncPromiseReject
 };

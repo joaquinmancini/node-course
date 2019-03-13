@@ -5,6 +5,12 @@ const countryInfo = require("../country-info"),
 
 describe("countries tests", () => {
 
+  after(() => {
+    // Code to be executed after ALL tests (just once)
+    // Used to clean up all tests results (possible leftovers or garbage)
+    sinon.restore();
+  });
+
   context("unit", () => {
 
     const data = {
