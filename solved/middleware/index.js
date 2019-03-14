@@ -32,9 +32,9 @@ function noFavicon(res) {
 }
 
 app.use((req, res, next) => {
-  if (req.url === "/none") {
+  if (req.baseUrl === "/none") {
     noAnswer(req);
-  } else if (req.url === "/favicon.ico") {
+  } else if (req.baseUrl === "/favicon.ico") {
     noFavicon(res);
   } else {
     res.logData = logRequest(req);

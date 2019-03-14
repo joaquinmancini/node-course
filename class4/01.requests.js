@@ -5,7 +5,7 @@ function getNodeRepos() {
   const options = {
     url: "https://api.github.com/orgs/nodejs/repos",
     headers: {
-      "user-agent": "node-course",
+      "user-agent": "node-course"
     }
   };
 
