@@ -8,7 +8,7 @@ module.exports = (mongoose) => {
 
   return (req, res, next) => {
     const dontAuth = publicPaths.find((path) => {
-      return path === `${req.method} ${req.url}`;
+      return path === `${req.method} ${req.originalUrl}`;
     });
 
     if (dontAuth) {
